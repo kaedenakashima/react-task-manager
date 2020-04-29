@@ -1,24 +1,275 @@
-import React, { useState, useEffect } from 'react';
-import { onAuthStateChanged } from './utils'
-import LoggedIn from './LoggedIn'
-import LoggedOut from './LoggedOut'
-import './App.css';
+import "../styles.css"
+import './App.css'
+import React, { useState } from "react"
+import { FaMinus, FaPlus } from "react-icons/fa"
 
-export default function App() {
-  const auth = null
-  const authAttempted = false
+export default function Minutes() {
+  const [minutes, setMinutes] = useState(5)
+  const [error, setError] = useState(null)
 
-  if (!authAttempted) {
-    return <p>Authenticating...</p>
+  const handleSubtract = () => {
+    if (minutes > 1) {
+      setMinutes(minutes - 1)
+    } else {
+      setError("Greater than 0 please 🦄")
+    }
+  }
+
+  const handleAdd = () => {
+    setMinutes(minutes + 1)
+    setError(null)
   }
 
   return (
-    <div className="Layout">
-      <h1>test</h1>
-      {auth ? <LoggedIn auth={auth} /> : <LoggedOut />}
+    <div>
+      <div className="Minutes">
+        <div>
+          <button
+            onClick={handleSubtract}
+            type="button"
+            className="icon_button Minutes_button"
+          >
+            <FaMinus />
+          </button>
+        </div>
+        <div className="Minutes_label" htmlFor="minutes">
+          {minutes} Minutes
+        </div>
+        <div>
+          <button
+            onClick={handleAdd}
+            type="button"
+            className="icon_button Minutes_button"
+          >
+            <FaPlus />
+          </button>
+        </div>
+      </div>
+      {error && (
+        <marquee>
+          <button
+            onClick={() => {
+              setError(null)
+            }}
+          >
+            Dismiss
+          </button>
+          <center>
+            <p style={{ color: "red" }}>{error}</p>
+          </center>
+        </marquee>
+      )}
     </div>
   )
 }
 
+// /**********************************************************/
+// We can make that value stateful by introducing useState. When we click the
+// buttons react calls `Minutes()` again, compares the element we returned last
+// time with the element we've returned this time. React is tracking the old
+// and new elements for us, as well as the current state. When it finds a
+// difference between the old and new element, it updates the DOM with the
+// minimal set of changes required and leaves the rest alone. We can watch it
+// in the browser dev tools.
 
+// export default function Minutes() {
+//   const [minutes, setMinutes] = useState(5)
 
+//   const handleAdd = () => setMinutes(minutes + 1)
+//   const handleSubtract = () => setMinutes(minutes - 1)
+
+//   return (
+//     <div className="Minutes">
+//       <div>
+//         <button
+//           onClick={handleSubtract}
+//           type="button" className="icon_button Minutes_button">
+//           <FaMinus />
+//         </button>
+//       </div>
+//       <div className="Minutes_label" htmlFor="minutes">
+//         {minutes} Minutes
+//       </div>
+//       <div>
+//         <button
+//           onClick={handleAdd}
+//           type="button" className="icon_button Minutes_button">
+//           <FaPlus />
+//         </button>
+//       </div>
+//     </div>
+//   )
+// }
+
+/**********************************************************/
+// We get to decide when to change state and when not to,
+// maybe we only want values 1 through 9.
+
+// export default function Minutes() {
+//   const [minutes, setMinutes] = useState(5)
+
+//   const handleAdd = () =>{
+//     if (minutes < 9) {
+//       setMinutes(minutes + 1)
+//     }
+//   }
+
+//   const handleSubtract = () => {
+//     if (minutes > 1) {
+//       setMinutes(minutes - 1)
+//     }
+//   }
+
+//   return (
+//     <div className="Minutes">
+//       <div>
+//         <button
+//           onClick={handleSubtract}
+//           type="button" className="icon_button Minutes_button">
+//           <FaMinus />
+//         </button>
+//       </div>
+//       <div className="Minutes_label" htmlFor="minutes">
+//         {minutes} Minutes
+//       </div>
+//       <div>
+//         <button
+//           onClick={handleAdd}
+//           type="button" className="icon_button Minutes_button">
+//           <FaPlus />
+//         </button>
+//       </div>
+//     </div>
+//   )
+// }
+
+/**********************************************************/
+// We can add multiple states, like an error state when they try to use an
+// invalid value. You can use && like an "if" inside of JSX
+
+// export default function Minutes() {
+//   const [minutes, setMinutes] = useState(5)
+//   const [error, setError] = useState(null)
+
+//   const handleAdd = () => {
+//     if (minutes < 9) {
+//       setMinutes(minutes + 1)
+//       setError(null)
+//     } else {
+//       setError("Less than 10 please.")
+//     }
+//   }
+
+//   const handleSubtract = () => {
+//     if (minutes > 1) {
+//       setMinutes(minutes - 1)
+//       setError(null)
+//     } else {
+//       setError("Greater than 0 please")
+//     }
+//   }
+
+//   return (
+//     <div>
+//       <div className="Minutes">
+//         <div>
+//           <button
+//             onClick={handleSubtract}
+//             type="button"
+//             className="icon_button Minutes_button"
+//           >
+//             <FaMinus />
+//           </button>
+//         </div>
+//         <div className="Minutes_label" htmlFor="minutes">
+//           {minutes} Minutes
+//         </div>
+//         <div>
+//           <button
+//             onClick={handleAdd}
+//             type="button"
+//             className="icon_button Minutes_button"
+//           >
+//             <FaPlus />
+//           </button>
+//         </div>
+//       </div>
+//       <div style={{ textAlign: 'center' }}>
+//         {error && (
+//           <p>
+//             {error}{" "}
+//             <span role="img" aria-label="yikes">
+//               😬
+//             </span>
+//           </p>
+//         )}
+//       </div>
+//     </div>
+//   )
+// }
+
+/**********************************************************/
+// Multiple elements can change the same state, here we can close
+// the error message by clicking a button inside it.
+
+// export default function Minutes() {
+//   const [minutes, setMinutes] = useState(5)
+//   const [error, setError] = useState(null)
+
+//   const handleAdd = () => {
+//     if (minutes < 9) {
+//       setMinutes(minutes + 1)
+//       setError(null)
+//     } else {
+//       setError("Less than 10 please.")
+//     }
+//   }
+
+//   const handleSubtract = () => {
+//     if (minutes > 1) {
+//       setMinutes(minutes - 1)
+//       setError(null)
+//     } else {
+//       setError("Greater than 0 please")
+//     }
+//   }
+
+//   return (
+//     <div>
+//       <div className="Minutes">
+//         <div>
+//           <button
+//             onClick={handleSubtract}
+//             type="button"
+//             className="icon_button Minutes_button"
+//           >
+//             <FaMinus />
+//           </button>
+//         </div>
+//         <div className="Minutes_label" htmlFor="minutes">
+//           {minutes} Minutes
+//         </div>
+//         <div>
+//           <button
+//             onClick={handleAdd}
+//             type="button"
+//             className="icon_button Minutes_button"
+//           >
+//             <FaPlus />
+//           </button>
+//         </div>
+//       </div>
+//       <div style={{ textAlign: 'center' }}>
+//         {error && (
+//           <p>
+//             {error}{" "}
+//             <span role="img" aria-label="eep!">
+//               😬
+//             </span><br/>
+//             <button onClick={() => setError(null)}>dismiss</button>
+//           </p>
+//         )}
+//       </div>
+//     </div>
+//   )
+// }

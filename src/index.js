@@ -1,112 +1,149 @@
-import "./app/App.css"
 import "./index.css"
-import './styles.css'
-
-import React, { Fragment } from "react"
+import "./app/App.css"
+import "./styles.css"
+import React, { useState } from "react"
 import ReactDOM from "react-dom"
-import { FaMinus, FaPlus } from 'react-icons/fa'
+import { FaMinus, FaPlus } from "react-icons/fa"
+import App from "./app/App"
 
-// just JavaScript
-const text = 'Add'
+export default function Minutes() {
+  const [minutes, setMinutes] = useState(5)
 
-const CTAButton = props => (
-  <button
-    onKeyDown={(event) => {
-      if (
-        event.key === 'Enter' ||
-        event.key === ' '
-      ) {
-        props.onKeyboardClick()
-      }
-    }}
-    className='icon_button cta'
-  >
-    {props.children}
-  </button>
-)
+  const handleAdd = () => setMinutes(minutes + 1)
+  const handleSubtract = () => setMinutes(minutes - 1)
 
-React.createElement('button', {
-  children: 'children'
-})
+  return (
+    <div className='Minutes'>
+      <div>
+        <button
+          onClick={handleSubtract}
+          type='button'
+          className='icon_button Minutes_button'
+        >
+          <FaMinus />
+        </button>
+      </div>
+      <div className='Minutes_label' htmlFor='minutes'>
+        {minutes} Minutes
+      </div>
+      <div>
+        <button
+          onClick={handleAdd}
+          type='button'
+          className='icon_button Minutes_button'
+        >
+          <FaPlus />
+        </button>
+      </div>
+    </div>
 
-const domElement = document.getElementById('root')
+  )
+}
+ReactDOM.render(<Minutes />, document.getElementById('root'));
 
-ReactDOM.render(
-  <div>
-    <CTAButton onClick={() => {
-      console.log('clicked!')
-    }}>
-      <FaMinus /> Subtract
-    </CTAButton>
-    <CTAButton>
-      <FaPlus /> Add
-    </CTAButton>
-  </div>,
-  domElement
-)
-
-// import "./app/App.css"
+// this is how to use useState in react!!
 // import "./index.css"
-// import './styles.css'
-
-
+// import "./app/App.css"
+// import "./styles.css"
+// import React from "react"
 // import ReactDOM from "react-dom"
-// import React from 'react'
-// import {
-//   Tabs,
-//   TabList,
-//   Tab,
-//   TabPanels,
-//   TabPanel
-// } from '@reach/tabs'
-// import LoginForm from './app/LoginForm'
-// import SignupForm from './app/SignupForm'
-// // import About from 'app/About'
+// import { FaMinus, FaPlus } from "react-icons/fa"
+// import App from "./app/App"
 
-// export default function LoggedOut() {
-//   return (
+// function Minutes() {
+//   const [minutes, setMinutes] = useState(5)
+//   const [error, setError] = useState(null)
+
+//   const handleAdd = () => {
+//     if (minutes < 9) {
+//       setMinutes(minutes + 1)
+//       setError(null)
+//     } else {
+//       setError("Less than 10 please.")
+//     }
+//   }
+
+//   const handleSubtract = () => {
+//     if (minutes > 1) {
+//       setMinutes(minutes - 1)
+//       setError(null)
+//     } else {
+//       setError("Greater than 0 please")
+//     }
+//   }
+
+//   console.log(states)
+
+//   const el = (
 //     <div>
-//       <h1>aaaa</h1>
-//       <div className='LoggedOut'>
-
-//         {/* <About /> */}
-//         {/* <Tabs>
-//         <TabList>
-//           <Tab>Login</Tab>
-//           <Tab>Signup</Tab>
-//         </TabList>
-//         <TabPanels>
-//           <TabPanel>
-//             <LoginForm />
-//           </TabPanel>
-//           <TabPanel>
-//             <SignupForm />
-//           </TabPanel>
-//         </TabPanels>
-//       </Tabs> */}
+//       <div className="Minutes">
+//         <div>
+//           <button
+//             onClick={handleSubtract}
+//             type="button"
+//             className="icon_button Minutes_button"
+//           >
+//             <FaMinus />
+//           </button>
+//         </div>
+//         <div className="Minutes_label" htmlFor="minutes">
+//           {minutes} Minutes
+//         </div>
+//         <div>
+//           <button
+//             onClick={handleAdd}
+//             type="button"
+//             className="icon_button Minutes_button"
+//           >
+//             <FaPlus />
+//           </button>
+//         </div>
+//       </div>
+//       <div style={{ textAlign: "center" }}>
+//         {error && (
+//           <p>
+//             {error}{" "}
+//             <span role="img" aria-label="eep!">
+//               😬
+//             </span>
+//             <br />
+//             <button onClick={() => setError(null)}>
+//               dismiss
+//             </button>
+//           </p>
+//         )}
 //       </div>
 //     </div>
 //   )
+
+//   return el
 // }
 
-// const domElement = document.getElementById('root')
+// const states = []
+// let callCount = -1
 
-// ReactDOM.render(
-//   <div className='LoggedOut'>
-//     <Tabs>
-//       <TabList>
-//         <Tab>Login</Tab>
-//         <Tab>Signup</Tab>
-//       </TabList>
-//       <TabPanels>
-//         <TabPanel>
-//           <LoginForm />
-//         </TabPanel>
-//         <TabPanel>
-//           <SignupForm />
-//         </TabPanel>
-//       </TabPanels>
-//     </Tabs>
-//   </div>,
-//   domElement
-// )
+// function useState(initialValue) {
+//   const id = ++callCount
+
+//   if (states[id]) {
+//     return states[id]
+//   }
+
+//   const setValue = newValue => {
+//     states[id][0] = newValue
+//     renderPhonyHooks()
+//   }
+
+//   const tuplé = [initialValue, setValue]
+//   states.push(tuplé)
+//   return tuplé
+// }
+
+// function renderPhonyHooks() {
+//   callCount = -1
+//   ReactDOM.render(
+//     <Minutes />,
+//     document.getElementById("root")
+//   )
+// }
+// renderPhonyHooks()
