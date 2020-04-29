@@ -8,37 +8,65 @@ import App from "./app/App"
 
 export default function Minutes() {
   const [minutes, setMinutes] = useState(5)
+  const [error, setError] = useState(null)
 
-  const handleAdd = () => setMinutes(minutes + 1)
-  const handleSubtract = () => setMinutes(minutes - 1)
+  const handleAdd = () => {
+    setMinutes(minutes + 1)
+    setError(null)
+  }
 
-  return (
-    <div className='Minutes'>
-      <div>
-        <button
-          onClick={handleSubtract}
-          type='button'
-          className='icon_button Minutes_button'
-        >
-          <FaMinus />
-        </button>
+  const handleSubtract = () => {
+    if (minutes > 1) {
+      setMinutes(minutes - 1)
+    } else {
+      setError('Greater than 0 please🥨😀')
+    }
+  }
+
+  const element = (
+    <div>
+      <div className='Minutes'>
+
+        <div>
+          <button
+            onClick={handleSubtract}
+            type='button'
+            className='icon_button Minutes_button'
+          >
+            <FaMinus />
+          </button>
+        </div>
+        <div className='Minutes_label' htmlFor='minutes'>
+          {minutes} Minutes
+        </div>
+        <div>
+          <button
+            onClick={handleAdd}
+            type='button'
+            className='icon_button Minutes_button'
+          >
+            <FaPlus />
+          </button>
+        </div>
+
       </div>
-      <div className='Minutes_label' htmlFor='minutes'>
-        {minutes} Minutes
-      </div>
-      <div>
-        <button
-          onClick={handleAdd}
-          type='button'
-          className='icon_button Minutes_button'
-        >
-          <FaPlus />
-        </button>
-      </div>
+      {error && (
+        <marquee>
+          <button onClick={() => {
+            setError(null)
+          }}>Dismiss</button>
+          <center>
+            <p>{error}</p>
+          </center>
+        </marquee>
+      )}
     </div>
-
   )
+  console.log(element)
+  return element
 }
+
+
 ReactDOM.render(<Minutes />, document.getElementById('root'));
 
 // this is how to use useState in react!!
