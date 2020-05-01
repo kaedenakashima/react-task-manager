@@ -1,4 +1,3 @@
-
 import React from 'react'
 import {
     Tabs,
@@ -14,6 +13,7 @@ import About from './About'
 export default function LoggedOut() {
     return (
         <div className='LoggedOut'>
+            <About />
             <Tabs>
                 <TabList>
                     <Tab>Login</Tab>

@@ -1,47 +1,73 @@
-import React, { Fragment } from 'react'
-import VisuallyHidden from '@reach/visually-hidden'
-import { signup } from './utils'
-import { FaDumbbell } from 'react-icons/fa'
-import { DateFields, MonthField, DayField, YearField } from './DateFields'
+import React, { Fragment, useState } from "react"
+import VisuallyHidden from "@reach/visually-hidden"
+import { signup } from "./utils"
+import TabsButton from "./TabsButton"
+import { FaDumbbell } from "react-icons/fa"
+import { DateFields, MonthField, DayField, YearField } from "./DateFields"
 
-function TabsButton({ children }) {
-    return (
-        <button className='TabsButton icon_button cta' type='submit'>
-            {children}
-        </button>
-    )
-}
-
-function TextInput({ id, label, type = 'text' }) {
-    return (
-        <Fragment>
-            <VisuallyHidden>
-                <label htmlFor={id}>{label}</label>
-            </VisuallyHidden>
-            <input id={id} placeholder={label} type={type} required />
-        </Fragment>
-    )
+function TextInput({ id, label, type = "text" }) {
+  return (
+    <Fragment>
+      <VisuallyHidden>
+        <label htmlFor={id}>{label}</label>
+      </VisuallyHidden>
+      <input id={id} placeholder={label} type={type} required />
+    </Fragment>
+  )
 }
 
 export default function SignupForm() {
-    return (
-        <form className='SignupForm'>
-            <TextInput id="displayName" label="Display Name" />
-            <TextInput id="photoURL" label="Avatar URL" />
-            <TextInput id="email" label="Email" />
-            <TextInput id="password" labell='Password' />
-            <p>
-                <span aria-hidden='true'>Start:</span>{' '}
-                <DateFields vallue={new Date()}>
-                    <MonthField aria-label='Start Month' />{' '}
-                    <DayField aria-label='Start Day' />{' '}
-                    <YearField start={2018} end={2019} aria-llabel='Start year' />
-                </DateFields>
-            </p>
-            <TabsButton>
-                <FaDumbbell />
-                <span>Sign Up</span>
-            </TabsButton>
-        </form>
-    )
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [startDate, setStartDate] = useState(new Date("March 1, 2019"))
+
+  const handleSignup = async event => {
+    event.preventDefault()
+    setLoading(true)
+    const [displayName, photoURL, email, password] = event.target.elements
+    try {
+      await signup({
+        displayName: displayName.value,
+        email: email.value,
+        password: password.value,
+        photoURL: photoURL.value,
+        startDate
+      })
+    } catch (error) {
+      setLoading(false)
+      setError(error)
+    }
+  }
+
+  return (
+    <div style={{ display: 'inline-grid' }}>
+      {error && (
+        <div>
+          <p>Oops, there was an error logging you in.</p>
+          <p>
+            <i>{error.message}</i>
+          </p>
+        </div>
+      )}
+
+      <form onSubmit={handleSignup}>
+        <TextInput id="displayName" label="Display Name" />
+        <TextInput id="photoURL" label="Avatar URL" />
+        <TextInput id="email" label="Email" />
+        <TextInput id="password" type="password" label="Password" />
+        <p>
+          <span aria-hidden="true">Start:</span>{" "}
+          <DateFields value={startDate} onChange={setStartDate}>
+            <MonthField aria-label="Start Month" /> /{" "}
+            <DayField aria-label="Start Day" /> /{" "}
+            <YearField start={2018} end={2019} aria-label="Start year" />
+          </DateFields>
+        </p>
+        <TabsButton>
+          <FaDumbbell />
+          <span>{loading ? "Loading..." : "Sign Up"}</span>
+        </TabsButton>
+      </form>
+    </div>
+  )
 }

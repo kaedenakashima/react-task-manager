@@ -1,41 +1,83 @@
-import React, { useState } from 'react'
-import VisuallyHidden from '@reach/visually-hidden'
-import { FaSignInAlt } from 'react-icons/fa'
-import TabsButton from './TabsButton'
-import { login } from './utils'
+import React, { useState, useRef } from "react"
+import { login } from "./utils"
+import VisuallyHidden from "@reach/visually-hidden"
+import { FaSignInAlt } from "react-icons/fa"
+import TabsButton from "./TabsButton"
 
 export default function LoginForm() {
-    return (
-        <form>
-            <VisuallyHidden>
-                <label htmlFor='login:email'>Email:</label>
-            </VisuallyHidden>
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const emailRef = useRef()
+  const passwordRef = useRef()
+
+  const handleLogin = async event => {
+    event.preventDefault()
+    setLoading(true)
+    try {
+      await login(emailRef.current.value, passwordRef.current.value)
+    } catch (error) {
+      setLoading(false)
+      setError(error)
+    }
+  }
+
+  const handleShowPassword = event => {
+    setShowPassword(event.target.checked)
+  }
+
+  return (
+    <div style={{ display: 'inline-grid' }}>
+      {error && (
+        <div>
+          <p>Oops, there was an error logging you in.</p>
+          <p>
+            <i>{error.message}</i>
+          </p>
+        </div>
+      )}
+
+      <form onSubmit={handleLogin}>
+        <VisuallyHidden>
+          <label htmlFor="login:email">Email:</label>
+        </VisuallyHidden>
+        <input
+          ref={emailRef}
+          id="login:email"
+          className="inputField"
+          placeholder="you@example.com"
+          required
+          type="text"
+        />
+
+        <VisuallyHidden>
+          <label htmlFor="login:password">Password:</label>
+        </VisuallyHidden>
+        <input
+          ref={passwordRef}
+          id="login:password"
+          type={showPassword ? "text" : "password"}
+          className="inputField"
+          required
+          placeholder="Password"
+        />
+        <div>
+          <label>
             <input
-                type='text'
-                id='login:email'
-                className='inputField'
-                placeholder='youremailaddress@example.com'
-            />
-            <VisuallyHidden>
-                <label htmlFor='login:password'>Password:</label>
-            </VisuallyHidden>
-            <input
-                id='login:password'
-                className='inputField'
-                placeholder='Password'
-            />
-            <div>
-                <label>
-                    <input
-                        className='passwordCheckbox'
-                        type='checkbox'
-                        defaultChecked={false}
-                    />{" "}
-                </label>
-            </div>
-            <TabsButton>
-                <span>Login</span>
-            </TabsButton>
-        </form>
-    )
+              className="passwordCheckbox"
+              type="checkbox"
+              onChange={handleShowPassword}
+              defaultChecked={showPassword}
+            />{" "}
+            show password
+          </label>
+        </div>
+
+        <TabsButton>
+          <FaSignInAlt />
+          <span>{loading ? "Loading..." : "Login"}</span>
+        </TabsButton>
+      </form>
+    </div>
+  )
 }

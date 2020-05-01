@@ -83,8 +83,8 @@ body {
 .Layout {
   min-height: 100vh;
   background-color: #edf4f7;
-  /* background-image: url("./assets/blue-fade.svg"), url("./assets/blue-fade.svg"),
-    url("./assets/blue-fade.svg"); */
+  background-image: url("./assets/blue-fade.svg"), url("./assets/blue-fade.svg"),
+    url("./assets/blue-fade.svg");
   background-position: 10vw 0, 25vw -10vw, 50vw -10vw;
   background-size: 110vw, 110vw, 140vw;
   background-repeat: no-repeat;
